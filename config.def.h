@@ -38,11 +38,61 @@ static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 
 static const Layout layouts[] = {
-	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
+	/* symbol	arrange		function */
+	{ "",		tile },		/* first entry is default */
+	{ "",		NULL },		/* no layout function means floating behavior */
+	{ "",		monocle },
 };
+
+/* this implements <alt-Tab> for dwm, put it in config.h  */
+static int alt_tab_count = 0;
+
+/* focus and restack a client */
+static void
+focus_restack(Client *c)
+   { if (c) { focus(c); restack(selmon); } }
+
+static void
+start_alt_tab(const Arg *arg)
+   { alt_tab_count = 0; }
+
+static
+Client *next_visible(Client *c)
+{
+   for(/* DO_NOTHING */; c && !ISVISIBLE(c); c=c->snext);
+   return c;
+}
+
+static int
+count_visible(void)
+{
+   int count = 0;
+   for (Client *c=next_visible(selmon->stack); c; c = next_visible(c->snext))
+		count += 1;
+   return count;
+}
+
+static
+Client *get_nth_client(int n)
+{
+   Client *c;
+   for (c=next_visible(selmon->stack); c && n--; c = next_visible(c->snext));
+   return c;
+}
+
+static void
+alt_tab(const Arg *arg)
+{
+	if (!selmon->sel)
+		return;
+   // put all of the windows back in their original focus/stack position */
+   for (int i=0; i<alt_tab_count; i+=1)
+		focus_restack(get_nth_client(alt_tab_count));
+
+   // focus and restack the nth window */
+   alt_tab_count = (alt_tab_count + 1) % count_visible();
+   focus_restack(get_nth_client(alt_tab_count));
+}
 
 /* key definitions */
 #define MODKEY Mod4Mask
@@ -64,20 +114,21 @@ static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_r,      spawn,          SHCMD("st -e nnn") },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
+	{ MODKEY,                       XK_n,      incnmaster,     {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_n,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_Return, zoom,           {0} },
-	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
+	{ MODKEY,                       XK_space,  zoom,           {0} },
+	{ MODKEY,                       XK_Escape, view,           {0} },
+	{ MODKEY,                       XK_w,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
+	{ MODKEY,                       XK_i,      setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
@@ -85,6 +136,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+	{ 0,							XK_Super_L,	start_alt_tab,		{0} },
+	{ MODKEY,						XK_Tab,		alt_tab,			{0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
