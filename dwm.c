@@ -202,7 +202,7 @@ static void sendmon(Client *c, Monitor *m);
 static void setclientstate(Client *c, long state);
 static void setfocus(Client *c);
 static void setfullscreen(Client *c, int fullscreen);
-static void setgaps(int oh, int ov, int ih, int iv);
+static void setgaps(int o, int i);
 static void incrgaps(const Arg *arg);
 static void incrigaps(const Arg *arg);
 static void incrogaps(const Arg *arg);
@@ -1115,7 +1115,7 @@ maprequest(XEvent *e)
 void
 monocle(Monitor *m)
 {
-	unsigned int n = 0, oe = ie = enablegaps;
+	unsigned int n = 0, oe = enablegaps, ie = enablegaps;
 	Client *c;
 
 	if (smartgaps == n) {
