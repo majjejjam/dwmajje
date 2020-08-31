@@ -3,6 +3,9 @@
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int gappi     = 25;       /*  inner gaps between windows */
+static const unsigned int gappo     = 60;       /*  outer gaps between windows and screen edge */
+static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "monospace:size=10" };
@@ -84,6 +87,18 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+
+	/* Gaps */
+	{ MODKEY,						XK_g,		togglegaps,			{.i = 0} },
+	{ MODKEY|ShiftMask,				XK_g,		defaultgaps,		{.i = 0} },
+	{ MODKEY,						XK_equal,	incrogaps,			{.i = 5} },
+	{ MODKEY,						XK_minus,	incrogaps,			{.i = -5} },
+	{ MODKEY|ShiftMask,				XK_equal,	incrigaps,			{.i = 5} },
+	{ MODKEY|ShiftMask,				XK_minus,	incrigaps,			{.i = -5} },
+	{ MODKEY|ControlMask,			XK_equal,	incrgaps,			{.i = 5} },
+	{ MODKEY|ControlMask,			XK_minus,	incrgaps,			{.i = -5} },
+
+	/* Tags */
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
