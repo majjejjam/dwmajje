@@ -13,10 +13,28 @@ static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
+
+static const char onedark1[]		= "#ABB2BF";
+static const char onedark2[]		= "#282C34";
+static const char onedark3[]		= "#ABB2BF";
+static const char onedark4[]		= "#5C6370";
+static const char onedark5[]		= "#4B5263";
+static const char onedark6[]		= "#E06C75";
+static const char onedark7[]		= "#BE5046";
+static const char onedark8[]		= "#9CB38C";
+static const char onedark9[]		= "#ACCF93";
+static const char onedark10[]		= "#E5C07B";
+static const char onedark11[]		= "#D19A66";
+static const char onedark12[]		= "#61AFEF";
+static const char onedark13[]		= "#C678DD";
+static const char onedark14[]		= "#56B6C2";
+static const char onedark15[]		= "#ABB2BF";
+static const char onedark16[]		= "#3E4452";
+
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeNorm]	= { onedark4,	onedark2,	onedark16 },
+	[SchemeSel]		= { onedark1,	onedark2,	onedark15 },
 };
 
 /* tagging */
