@@ -1118,10 +1118,6 @@ monocle(Monitor *m)
 	unsigned int n = 0;
 	Client *c;
 
-	if (smartgaps == n) {
-		oe = 0; // outer gaps disabled
-	}
-
 	for (c = m->clients; c; c = c->next)
 		if (ISVISIBLE(c))
 			n++;
