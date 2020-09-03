@@ -1115,7 +1115,7 @@ maprequest(XEvent *e)
 void
 monocle(Monitor *m)
 {
-	unsigned int n = 0, oe = enablegaps;
+	unsigned int n = 0;
 	Client *c;
 
 	if (smartgaps == n) {
@@ -1128,7 +1128,7 @@ monocle(Monitor *m)
 	if (n > 0) /* override layout symbol */
 		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n);
 	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
-		resize(c, m->wx + m->gappo*oe, m->wy + m->gappo*oe, m->ww - 2 * c->bw - 2 * m->gappo*oe, m->wh - 2 * c->bw - 2 * m->gappo*oe, 0);
+		resize(c, m->wx + m->gappo*enablegaps, m->wy + m->gappo*enablegaps, m->ww - 2 * c->bw - 2 * m->gappo*enablegaps, m->wh - 2 * c->bw - 2 * m->gappo*enablegaps, 0);
 }
 
 void
