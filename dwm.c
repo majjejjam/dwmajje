@@ -1115,7 +1115,7 @@ maprequest(XEvent *e)
 void
 monocle(Monitor *m)
 {
-	unsigned int n = 0, oe = enablegaps, ie = enablegaps;
+	unsigned int n = 0, oe = enablegaps;
 	Client *c;
 
 	if (smartgaps == n) {
