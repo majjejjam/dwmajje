@@ -128,8 +128,8 @@ struct Monitor {
 	int by;               /* bar geometry */
 	int mx, my, mw, mh;   /* screen size */
 	int wx, wy, ww, wh;   /* window area  */
-	int gappi;            /* gap between windows */
-	int gappo;            /* outer gaps */
+	int gapi;            /* gap between windows */
+	int gapo;            /* outer gaps */
 	unsigned int seltags;
 	unsigned int sellt;
 	unsigned int tagset[2];
@@ -726,8 +726,8 @@ createmon(void)
 	m->nmaster = nmaster;
 	m->showbar = showbar;
 	m->topbar = topbar;
-	m->gappi = gappi;
-	m->gappo = gappo;
+	m->gapi = gapi;
+	m->gapo = gapo;
 	m->lt[0] = &layouts[0];
 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
 	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
@@ -1224,7 +1224,7 @@ monocle(Monitor *m)
 	if (n > 0) /* override layout symbol */
 		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n);
 	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
-		resize(c, m->wx + m->gappo*enablegaps, m->wy + m->gappo*enablegaps, m->ww - 2 * c->bw - 2 * m->gappo*enablegaps, m->wh - 2 * c->bw - 2 * m->gappo*enablegaps, 0);
+		resize(c, m->wx + m->gapo*enablegaps, m->wy + m->gapo*enablegaps, m->ww - 2 * c->bw - 2 * m->gapo*enablegaps, m->wh - 2 * c->bw - 2 * m->gapo*enablegaps, 0);
 }
 
 void
@@ -1615,8 +1615,8 @@ setgaps(int o, int i)
 	if (o < 0) o = 0;
 	if (i < 0) i = 0;
 
-	selmon->gappo = o;
-	selmon->gappi = i;
+	selmon->gapo = o;
+	selmon->gapi = i;
 	arrange(selmon);
 }
 
@@ -1630,15 +1630,15 @@ togglegaps(const Arg *arg)
 void
 defaultgaps(const Arg *arg)
 {
-	setgaps(gappo, gappi);
+	setgaps(gapo, gapi);
 }
 
 void
 incrgaps(const Arg *arg)
 {
 	setgaps(
-		selmon->gappo + arg->i,
-		selmon->gappi + arg->i
+		selmon->gapo + arg->i,
+		selmon->gapi + arg->i
 	);
 }
 
@@ -1646,8 +1646,8 @@ void
 incrigaps(const Arg *arg)
 {
 	setgaps(
-		selmon->gappo,
-		selmon->gappi + arg->i
+		selmon->gapo,
+		selmon->gapi + arg->i
 	);
 }
 
@@ -1655,8 +1655,8 @@ void
 incrogaps(const Arg *arg)
 {
 	setgaps(
-		selmon->gappo + arg->i,
-		selmon->gappi
+		selmon->gapo + arg->i,
+		selmon->gapi
 	);
 }
 
@@ -1848,22 +1848,22 @@ tile(Monitor *m)
 	}
 
 	if (n > m->nmaster)
-		mw = m->nmaster ? (m->ww + m->gappi*ie) * m->mfact : 0;
+		mw = m->nmaster ? (m->ww + m->gapi*ie) * m->mfact : 0;
 	else
-		mw = m->ww - 2*m->gappo*oe + m->gappi*ie;
-	for (i = 0, my = ty = m->gappo*oe, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+		mw = m->ww - 2*m->gapo*oe + m->gapi*ie;
+	for (i = 0, my = ty = m->gapo*oe, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if (i < m->nmaster) {
 			r = MIN(n, m->nmaster) - i;
-			h = (m->wh - my - m->gappo*oe - m->gappi*ie * (r - 1)) / r;
-			resize(c, m->wx + m->gappo*oe, m->wy + my, mw - (2*c->bw) - m->gappi*ie, h - (2*c->bw), 0);
-			if (my + HEIGHT(c) + m->gappi*ie < m->wh)
-				my += HEIGHT(c) + m->gappi*ie;
+			h = (m->wh - my - m->gapo*oe - m->gapi*ie * (r - 1)) / r;
+			resize(c, m->wx + m->gapo*oe, m->wy + my, mw - (2*c->bw) - m->gapi*ie, h - (2*c->bw), 0);
+			if (my + HEIGHT(c) + m->gapi*ie < m->wh)
+				my += HEIGHT(c) + m->gapi*ie;
 		} else {
 			r = n - i;
-			h = (m->wh - ty - m->gappo*oe - m->gappi*ie * (r - 1)) / r;
-			resize(c, m->wx + mw + m->gappo*oe, m->wy + ty, m->ww - mw - (2*c->bw) - 2*m->gappo*oe, h - (2*c->bw), 0);
-			if (ty + HEIGHT(c) + m->gappi*ie < m->wh)
-				ty += HEIGHT(c) + m->gappi*ie;
+			h = (m->wh - ty - m->gapo*oe - m->gapi*ie * (r - 1)) / r;
+			resize(c, m->wx + mw + m->gapo*oe, m->wy + ty, m->ww - mw - (2*c->bw) - 2*m->gapo*oe, h - (2*c->bw), 0);
+			if (ty + HEIGHT(c) + m->gapi*ie < m->wh)
+				ty += HEIGHT(c) + m->gapi*ie;
 		}
 }
 
